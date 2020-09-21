@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head"></head>
+<body>
+<h3>Add Customer</h3>
+<p>
+    <a th:href="@{/province}">
+        Back to province list
+    </a>
+</p>
+<div id="form">
+    <form th:object="${province} " method="POST">
+        <div>
+            <label>ProvinceName</label>
+            <input type="text" th:field="*{name}"/>
+        </div>
+        <input type="submit" value="Creat new province">
+    </form>
+</div>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

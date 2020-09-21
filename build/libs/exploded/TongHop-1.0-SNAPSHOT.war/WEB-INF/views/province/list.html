@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout::head">
 </head>
-<body>
-
+<br>
+<h3>Customers</h3>
+<a href="/create-province">Create new province</a>
+</br>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<table id = "customers">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Province</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>ViewCustomerOfProvince</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="province : ${provinces}">
+        <td th:text="${province.getId()}"></td>
+        <td th:text="${province.getName()}"></td>
+        <td><a th:href="@{/edit-province/{id}(id=${province.getId()})}">Edit</a></td>
+        <td><a th:href="@{/delete-province/{id}(id=${province.getId()})}">Delete</a></td>
+        <td><a th:href="@{/view-province/{id}(id=${province.getId()})}">View</a></td>
+    </tr>
+    </tbody>
+</table>
+<p>
+    <a th:href="@{}">
+        Back to menu
+    </a>
+</p>
+<footer th:replace="/layout :: footer"></footer>
 </body>
 </html>

@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
 </head>
 <body>
-
+<h3>Modify Customer</h3>
+<p>
+    <a th:href="@{/customer}">
+        Back to customer list
+    </a>
+</p>
+<div id="form">
+    <form th:object="${customer}" method="POST">
+        <input type="hidden" th:field="*{id}"/>
+        <table>
+            <tr>
+                <th style="float: left"><label>FirstName:  </label></th>
+                <td><label th:text="${customer.getFirstName()}"></label></td>
+            </tr>
+            <tr>
+                <th style="float: left"><label>LastName:  </label></th>
+                <td><label th:text="${customer.getLastName()}"></label></td>
+            </tr>
+            <tr>
+                <th style="float: left"><label>Province:  </label></th>
+                <td><label th:text="${customer.province.name}"></label></td>
+            </tr>
+        </table>
+        <input type="submit" value="Delete customer">
+    </form>
+</div>
+<footer th:replace="/layout :: footer"></footer>
 </body>
 </html>

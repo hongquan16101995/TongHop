@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout::head">
+</head>
+<br>
+<h3>View customer of province: <span th:text="${province.name}"></span></h3>
+<p>
+    <a th:href="@{/province}">
+        Back to province list
+    </a>
+</p>
+</br>
+<a th:href="@{/create-customer-province/{idp}(idp=${province.id})}">Create new customer</a>
+</br>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<table id = "customers">
+    <thead>
+    <tr>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Province</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customer : ${customers}">
+        <td th:text="${customer.getFirstName()}"></td>
+        <td th:text="${customer.getLastName()}"></td>
+        <td th:text="${customer.province.getName()}"></td>
+        <td><a th:href="@{/edit-customer-province/{id}/{idp}(id=${customer.getId()}, idp=${province.id})}">Edit</a></td>
+        <td><a th:href="@{/delete-customer-province/{id}/{idp}(id=${customer.getId()}, idp=${province.id})}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

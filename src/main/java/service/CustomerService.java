@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CustomerService {
-    Page<Customer> findAll(Pageable pageable);
+    Iterable<Customer> findAll();
 
     Customer findById(Long id);
 
@@ -14,5 +14,5 @@ public interface CustomerService {
 
     void remove(Long id);
 
-    Page<Customer> findAllByProvince(Province province, Pageable pageable);
+    Iterable<Customer> findAllByProvince(Province province);
 }

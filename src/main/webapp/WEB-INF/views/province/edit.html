@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head"></head>
 <body>
-
+<h3>Modify Customer</h3>
+<p>
+    <a th:href="@{/province}">
+        Back to province list
+    </a>
+</p>
+<div id="form">
+    <form th:object="${province}" method="POST">
+        <input type="hidden" th:field="*{id}"/>
+        <div>
+            <label>NameProvince</label>
+            <input type="text" th:field="*{name}"/>
+        </div>
+        <input type="submit" value="Edit province">
+    </form>
+</div>
+<footer th:replace="/layout :: footer"></footer>
 </body>
 </html>

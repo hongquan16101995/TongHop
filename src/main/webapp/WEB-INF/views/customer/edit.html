@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head"></head>
 <body>
-
+<h3>Modify Customer</h3>
+<p>
+    <a th:href="@{/customer}">
+        Back to customer list
+    </a>
+</p>
+<div id="form">
+    <form th:object="${customer}" method="POST">
+        <input type="hidden" th:field="*{id}"/>
+        <div>
+            <label>FirstName</label>
+            <input type="text" th:field="*{firstName}"/>
+        </div>
+        <div>
+            <label>LastName</label>
+            <input type="text" th:field="*{lastName}"/>
+        </div>
+        <div>
+            <label>Province</label>
+            <select name="province">
+                <option th:each="p : ${provinces}"
+                        th:value="${p.id}"
+                        th:text="${p.name}"
+                        th:selected="(${p.id} == *{province.id})"></option>
+            </select>
+        </div>
+        <input type="submit" value="Edit customer">
+    </form>
+</div>
+<footer th:replace="/layout :: footer"></footer>
 </body>
 </html>

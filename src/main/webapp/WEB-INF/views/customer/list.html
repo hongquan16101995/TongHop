@@ -2,15 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/layout::head">
 </head>
-<body>
+
 <h3>Customers</h3>
 <a href="/create-customer">Create new customer</a>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
 <table id = "customers">
     <thead>
     <tr>
         <th>FirstName</th>
         <th>LastName</th>
         <th>Province</th>
+        <th>Edit</th>
+        <th>Delete</th>
         <th>View</th>
     </tr>
     </thead>
@@ -21,9 +26,15 @@
         <td th:text="${customer.province.getName()}"></td>
         <td><a th:href="@{/edit-customer/{id}(id=${customer.getId()})}">Edit</a></td>
         <td><a th:href="@{/delete-customer/{id}(id=${customer.getId()})}">Delete</a></td>
+        <td><a th:href="@{/view-customer/{id}(id=${customer.getId()})}">View</a></td>
     </tr>
     </tbody>
 </table>
+<p>
+    <a th:href="@{}">
+        Back to menu
+    </a>
+</p>
 <footer th:replace="/layout :: footer"></footer>
 </body>
 </html>
