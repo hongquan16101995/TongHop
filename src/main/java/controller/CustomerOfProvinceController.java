@@ -3,6 +3,10 @@ package controller;
 import model.Customer;
 import model.Province;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +26,13 @@ public class CustomerOfProvinceController {
     private ProvinceService provinceService;
 
     @GetMapping("/view-province")
-    public ModelAndView viewProvince(Long id){
+    public ModelAndView viewProvince(Long id, @SortDefault(sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         Province province = provinceService.findById(id);
         if(province == null){
             return new ModelAndView("/error.404");
         }
 
-        Iterable<Customer> customers = customerService.findAllByProvince(province);
+        Page<Customer> customers = customerService.findAllByProvince(province, pageable);
 
         ModelAndView modelAndView = new ModelAndView("/province/view");
         modelAndView.addObject("province", province);
@@ -48,10 +52,11 @@ public class CustomerOfProvinceController {
     }
 
     @PostMapping("/create-customer-province/{idp}")
-    public ModelAndView saveCustomer(@PathVariable("idp") long idp, @ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView saveCustomer(@PathVariable("idp") long idp, @ModelAttribute("customer") Customer customer, Model model,
+                                     @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10)Pageable pageable){
         customerService.save(customer);
         model.addAttribute("message", "New customer created successfully");
-        return viewProvince(idp);
+        return viewProvince(idp, pageable);
     }
 
     @GetMapping("/edit-customer-province/{id}/{idp}")
@@ -66,10 +71,11 @@ public class CustomerOfProvinceController {
     }
 
     @PostMapping("/edit-customer-province/{id}/{idp}")
-    public ModelAndView updateCustomer(@PathVariable("idp") long idp, @ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView updateCustomer(@PathVariable("idp") long idp, @ModelAttribute("customer") Customer customer, Model model,
+                                       @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         customerService.save(customer);
         model.addAttribute("message", "Customer updated successfully");
-        return viewProvince(idp);
+        return viewProvince(idp, pageable);
     }
 
     @GetMapping("/delete-customer-province/{id}/{idp}")
@@ -84,9 +90,10 @@ public class CustomerOfProvinceController {
     }
 
     @PostMapping("/delete-customer-province/{id}/{idp}")
-    public ModelAndView removeCustomer(@PathVariable("idp") long idp, @ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView removeCustomer(@PathVariable("idp") long idp, @ModelAttribute("customer") Customer customer, Model model,
+                                       @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         customerService.remove(customer.getId());
         model.addAttribute("message", "Customer deleted successfully");
-        return viewProvince(idp);
+        return viewProvince(idp, pageable);
     }
 }

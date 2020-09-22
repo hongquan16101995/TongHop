@@ -3,6 +3,10 @@ package controller;
 import model.Customer;
 import model.Province;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +39,7 @@ public class ProvinceController {
     @PostMapping("/create-province")
     public ModelAndView saveProvince(@ModelAttribute("province") Province province, Model model){
         provinceService.save(province);
-        model.addAttribute("message", "New customer created successfully");
+        model.addAttribute("message", "New province created successfully");
         return showListProvince();
     }
 
@@ -52,7 +56,7 @@ public class ProvinceController {
     @PostMapping("/edit-province/{id}")
     public ModelAndView updateProvince(@ModelAttribute("province") Province province, Model model){
         provinceService.save(province);
-        model.addAttribute("message", "Customer updated successfully");
+        model.addAttribute("message", "Province updated successfully");
         return showListProvince();
     }
 
@@ -69,18 +73,18 @@ public class ProvinceController {
     @PostMapping("/delete-province/{id}")
     public ModelAndView removeProvince(@ModelAttribute("province") Province province, Model model){
         provinceService.remove(province.getId());
-        model.addAttribute("message", "Customer deleted successfully");
+        model.addAttribute("message", "Province deleted successfully");
         return showListProvince();
     }
 
     @GetMapping("/view-province/{id}")
-    public ModelAndView viewProvince(@PathVariable("id") Long id){
+    public ModelAndView viewProvince(@PathVariable("id") Long id, @SortDefault(sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         Province province = provinceService.findById(id);
         if(province == null){
             return new ModelAndView("/error.404");
         }
 
-        Iterable<Customer> customers = customerService.findAllByProvince(province);
+        Page<Customer> customers = customerService.findAllByProvince(province, pageable);
 
         ModelAndView modelAndView = new ModelAndView("/province/view");
         modelAndView.addObject("province", province);

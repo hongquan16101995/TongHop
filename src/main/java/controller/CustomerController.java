@@ -3,6 +3,11 @@ package controller;
 import model.Customer;
 import model.Province;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +32,8 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public ModelAndView showListCustomer(){
-        Iterable<Customer> customers = customerService.findAll();
+    public ModelAndView showListCustomer(@SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
+        Page<Customer> customers = customerService.findAll(pageable);
         return new ModelAndView("/customer/list", "customers", customers);
     }
 
@@ -38,10 +43,11 @@ public class CustomerController {
     }
 
     @PostMapping("/create-customer")
-    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, Model model,
+                                     @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         customerService.save(customer);
         model.addAttribute("message", "New customer created successfully");
-        return showListCustomer();
+        return showListCustomer(pageable);
     }
 
     @GetMapping("/edit-customer/{id}")
@@ -55,10 +61,11 @@ public class CustomerController {
     }
 
     @PostMapping("/edit-customer/{id}")
-    public ModelAndView updateCustomer(@ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView updateCustomer(@ModelAttribute("customer") Customer customer, Model model,
+                                       @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         customerService.save(customer);
         model.addAttribute("message", "Customer updated successfully");
-        return showListCustomer();
+        return showListCustomer(pageable);
     }
 
     @GetMapping("/delete-customer/{id}")
@@ -72,10 +79,11 @@ public class CustomerController {
     }
 
     @PostMapping("/delete-customer/{id}")
-    public ModelAndView removeCustomer(@ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView removeCustomer(@ModelAttribute("customer") Customer customer, Model model,
+                                       @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable ){
         customerService.remove(customer.getId());
         model.addAttribute("message", "Customer deleted successfully");
-        return showListCustomer();
+        return showListCustomer(pageable);
     }
 
     @GetMapping("/view-customer/{id}")

@@ -13,8 +13,8 @@ public class CustomerServiceImp implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    public Iterable<Customer> findAll() {
-        return customerRepository.findAll();
+    public Page<Customer> findAll(Pageable pageable) {
+        return customerRepository.findAll(pageable);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Iterable<Customer> findAllByProvince(Province province) {
-        return customerRepository.findAllByProvince(province);
+    public Page<Customer> findAllByProvince(Province province,Pageable pageable) {
+        return customerRepository.findAllByProvince(province,pageable);
     }
 }
