@@ -3,7 +3,7 @@
 <head th:replace="/layout::head">
 </head>
 <br>
-<h3>Customers</h3>
+<h3>Province</h3>
 <a href="/create-province">Create new province</a>
 </br>
 <th:block th:if="${message}">
@@ -12,7 +12,6 @@
 <table id = "customers">
     <thead>
     <tr>
-        <th>ID</th>
         <th>Province</th>
         <th>Edit</th>
         <th>Delete</th>
@@ -21,7 +20,6 @@
     </thead>
     <tbody>
     <tr th:each="province : ${provinces}">
-        <td th:text="${province.getId()}"></td>
         <td th:text="${province.getName()}"></td>
         <td><a th:href="@{/edit-province/{id}(id=${province.getId()})}">Edit</a></td>
         <td><a th:href="@{/delete-province/{id}(id=${province.getId()})}">Delete</a></td>
@@ -30,7 +28,7 @@
     </tbody>
 </table>
 <p>
-    <a th:href="@{}">
+    <a th:href="@{/}">
         Back to menu
     </a>
 </p>

@@ -10,13 +10,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import service.CustomerService;
 import service.ProvinceService;
+
+import java.util.Optional;
 
 @Controller
 public class CustomerController {
@@ -32,9 +31,17 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public ModelAndView showListCustomer(@SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
-        Page<Customer> customers = customerService.findAll(pageable);
-        return new ModelAndView("/customer/list", "customers", customers);
+    public ModelAndView showListCustomer(@RequestParam("s") Optional<String> s, Model model,
+                                         @SortDefault (sort = {"lastName"}) @PageableDefault(value = 5) Pageable pageable){
+        Page<Customer> customers;
+        ModelAndView modelAndView = new ModelAndView("/customer/list");
+        if(s.isPresent()){
+            customers = customerService.findAllByLastNameContaining(s.get(), pageable);
+        } else {
+            customers = customerService.findAll(pageable);
+        }
+        modelAndView.addObject("customers", customers);
+        return modelAndView;
     }
 
     @GetMapping("/create-customer")
@@ -47,7 +54,8 @@ public class CustomerController {
                                      @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         customerService.save(customer);
         model.addAttribute("message", "New customer created successfully");
-        return showListCustomer(pageable);
+        Page<Customer> customers = customerService.findAll(pageable);
+        return new ModelAndView("/customer/list", "customers", customers);
     }
 
     @GetMapping("/edit-customer/{id}")
@@ -65,7 +73,8 @@ public class CustomerController {
                                        @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable){
         customerService.save(customer);
         model.addAttribute("message", "Customer updated successfully");
-        return showListCustomer(pageable);
+        Page<Customer> customers = customerService.findAll(pageable);
+        return new ModelAndView("/customer/list", "customers", customers);
     }
 
     @GetMapping("/delete-customer/{id}")
@@ -83,7 +92,8 @@ public class CustomerController {
                                        @SortDefault (sort = {"lastName"}) @PageableDefault(value = 10) Pageable pageable ){
         customerService.remove(customer.getId());
         model.addAttribute("message", "Customer deleted successfully");
-        return showListCustomer(pageable);
+        Page<Customer> customers = customerService.findAll(pageable);
+        return new ModelAndView("/customer/list", "customers", customers);
     }
 
     @GetMapping("/view-customer/{id}")
